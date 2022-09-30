@@ -1,0 +1,68 @@
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button, Grid } from '@mui/material';
+
+const initData = [
+  {
+    id: 1,
+    name: 'PC Creation',
+    path: `/dashboard/player-counter`,
+    isActive: true,
+  },
+  {
+    id: 2,
+    name: 'PCO Tracker',
+    path: `/dashboard/player-counter/pco-tracker`,
+    isActive: false,
+  },
+  {
+    id: 3,
+    name: 'Market Tracker',
+    path: `/dashboard/player-counter/market-tracker`,
+    isActive: false,
+  },
+  {
+    id: 4,
+    name: 'Archived',
+    path: `/dashboard/player-counter/archived`,
+    isActive: false,
+  },
+];
+
+export const NavItems = () => {
+  const [tabs, setTabs] = useState(initData);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleTabClick = (tab) => {
+    navigate(tab.path);
+    setTabs((current) => {
+      return current.map((cur) => {
+        if (cur.id === tab.id) {
+          return { ...cur, isActive: true };
+        }
+        return { ...cur, isActive: false };
+      });
+    });
+  };
+
+  return (
+    <Grid
+      className="tabs"
+      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly', marginBottom: '5%' }}
+    >
+      {tabs.map((tab) => {
+        return (
+          <Button
+            key={tab.id}
+            variant={tab.path === location.pathname ? 'contained' : "outlined"}
+            onClick={() => handleTabClick(tab)}
+            style={{ width: '15%' }}
+          >
+            {tab.name}
+          </Button>
+        );
+      })}
+    </Grid>
+  );
+};
